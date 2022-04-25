@@ -27,8 +27,8 @@ def get_volume_stock_price(symbols, start_date, end_date):
     return df
 
 #get the closing price of the stocks end date to be today
-start_date = st.sidebar.date_input('Start Date', value=pd.Timestamp('2020-01-01'))
-end_date = st.sidebar.date_input('End Date', value=pd.Timestamp('2020-06-01'))
+start_date = st.sidebar.date_input('Start Date', value=pd.Timestamp('2021-04-01'))
+end_date = st.sidebar.date_input('End Date', value=pd.Timestamp('2022-04-01'))
 
 #based on dates selected and stocks selected get the line charts for the shares
 df = get_close_stock_price(tickerSymbol, start_date, end_date)
@@ -43,5 +43,35 @@ st.area_chart(df, width=800, height=400, use_container_width=True)
 #line chart for the volume of the stocks
 st.header('Stock Volume' + ' (' + start_date.strftime('%Y-%m-%d') + ' to ' + end_date.strftime('%Y-%m-%d') + ')')
 st.bar_chart(df_volume, width=800, height=400, use_container_width=True)
+
+#create a container and inside that put two columns and in two columns put the line chart and the volume chart
+st.header('Analysis of the Stocks')
+
+col1, col2  = st.columns(2)
+
+#col1 to be moving average of the closing price of the stocks of last 30 days with the header of the moving average
+col1.subheader('Moving Average')
+col1.area_chart(df.rolling(window=30).mean(), width=800, height=400, use_container_width=True)
+
+#col2 to be volume of the stocks of last 30 days
+col2.subheader('Volume of the stocks')
+col2.bar_chart(df_volume.rolling(window=30).mean(), width=800, height=400, use_container_width=True)
+
+col3, col4 = st.columns(2)
+
+#col3 to be standard deviation of the closing price of the stocks of last 30 days
+col3.subheader('Standard Deviation')
+col3.line_chart(df.rolling(window=30).std(), width=800, height=400, use_container_width=True)
+
+#col4 to be returns of the closing price of the stocks of last 30 days
+col4.subheader('Returns')
+col4.line_chart(df.pct_change(periods=30), width=800, height=400, use_container_width=True)
+
+
+
+
+
+
+
 
 
