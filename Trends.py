@@ -32,7 +32,7 @@ def get_volume_stock_price_mplfinance(symbols, start_date, end_date):
 
 #get the closing price of the stocks end date to be today
 start_date = st.sidebar.date_input('Start Date', value=pd.Timestamp('2021-04-01'))
-end_date = st.sidebar.date_input('End Date', value=pd.Timestamp('2022-04-01'))
+end_date = st.sidebar.date_input('End Date', value=pd.Timestamp('2022-04-26'))
 
 #based on dates selected and stocks selected get the line charts for the shares
 df = get_close_stock_price_mplfinance(tickerSymbol, start_date, end_date)
