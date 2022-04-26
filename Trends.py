@@ -1,9 +1,6 @@
-# import yfinance as yf
 import streamlit as st
 import pandas as pd
 import numpy as np
-# import plotly.graph_objects as go
-# import matplotlib.pyplot as plt
 import pandas_datareader as web
 import mplfinance as mpf
 import datetime as dt
@@ -42,7 +39,7 @@ df_volume = get_volume_stock_price_mplfinance(tickerSymbol, start_date, end_date
 
 #line chart for the closing price of the stocks
 st.header('Stock Closing Price' + ' (' + start_date.strftime('%Y-%m-%d') + ' to ' + end_date.strftime('%Y-%m-%d') + ')')
-st.area_chart(df, width=800, height=400, use_container_width=True)
+st.line_chart(df, width=800, height=400, use_container_width=True)
 
 #line chart for the volume of the stocks
 st.header('Stock Volume' + ' (' + start_date.strftime('%Y-%m-%d') + ' to ' + end_date.strftime('%Y-%m-%d') + ')')
@@ -51,31 +48,42 @@ st.bar_chart(df_volume, width=800, height=400, use_container_width=True)
 #create a container and inside that put two columns and in two columns put the line chart and the volume chart
 st.header('Analysis of the Stocks')
 
+#select window size
+window_size = st.slider('Select the window size', 10, 30, 5)
+
+#get the moving average of the stocks
+def get_moving_average(df, window):
+    ma = df.rolling(window=window).mean()
+    return ma
+
+#get the moving average of the stocks
+def get_moving_average_volume(df_volume, window):
+    ma = df_volume.rolling(window=window).mean()
+    return ma
+
+#get the moving average of the stocks
+def get_momentum(df, window):
+    momentum = df.diff(window)
+    return momentum
+
+#get the moving average of the stocks
+def get_momentum_volume(df, window):
+    momentum = df.diff(window)
+    return momentum
+
 col1, col2  = st.columns(2)
 
-#col1 to be moving average of the closing price of the stocks of last 30 days with the header of the moving average
 col1.subheader('Moving Average')
-col1.area_chart(df.rolling(window=30).mean(), width=800, height=400, use_container_width=True)
+col1.bar_chart(get_moving_average(df, window_size))
 
-#col2 to be volume of the stocks of last 30 days
-col2.subheader('Volume of the stocks')
-col2.bar_chart(df_volume.rolling(window=30).mean(), width=800, height=400, use_container_width=True)
+col2.subheader('Moving Average Volume')
+col2.bar_chart(get_moving_average_volume(df_volume, window_size))
 
 col3, col4 = st.columns(2)
 
-#col3 to be standard deviation of the closing price of the stocks of last 30 days
-col3.subheader('Standard Deviation')
-col3.line_chart(df.rolling(window=30).std(), width=800, height=400, use_container_width=True)
+col3.subheader('Momentum')
+col3.bar_chart(get_momentum(df, window_size))
 
-#col4 to be returns of the closing price of the stocks of last 30 days
-col4.subheader('Returns')
-col4.line_chart(df.pct_change(periods=30), width=800, height=400, use_container_width=True)
-
-
-
-
-
-
-
-
+col4.subheader('Momentum Volume')
+col4.bar_chart(get_momentum_volume(df_volume, window_size))
 
