@@ -9,7 +9,7 @@ import datetime as dt
 st.title("Stock Price Analysis")
 
 #Multiselect box to get the charts and info of the stocks
-tickerSymbol = st.multiselect('Select the ticker symbols of the stocks',('TSLA','TWTR','GOOGL','AMZN','FB','AAPL'))
+tickerSymbol = st.multiselect('Select the ticker symbols of the stocks',('TSLA','TWTR','GOOGL','AMZN','FB','AAPL', 'NFLX'))
 
 #get the closing price of the stocks using mplfinance
 def get_close_stock_price_mplfinance(symbols, start_date, end_date):
